@@ -1,0 +1,57 @@
+<template>
+<div id="container" class="flex flex-col flex-wrap text-center p-4 items-center align-center">
+    <label for="textare" class="mb-4 text-lg text-white">No. of Waifu</label>
+    <input class="w-96 rounded-sm p-1 h-10 mb-4" type="number" id="textare" placeholder="Enter" v-model="max_count">
+    <button @click="fetchAPI" type="button" :class="{'disab':isRunning}"
+      class="mt-4 mb-2 rounded-lg mx-1 border-2 text-lg py-1 px-2 text-white hover:bg-white hover:border-black hover:text-black">Search</button>
+      <span class="mt-2 text-yellow-600">Note: Due to the limit on API, each image takes 6 seconds to load</span>  
+  </div>
+  <div id="contents" class="flex flex-wrap card m-2 p-2 justify-around">
+
+  </div>
+</template>
+
+<script>
+
+export default{
+    name: "my-home",
+    data(){
+        return{
+            max_count : null,
+            isRunning : false,
+        }
+    },
+    methods: {
+        fetchData(){
+            fetch('https://api.waifu.im/search/')
+            .then(response => response.json())
+            .then(data => {
+                let contents = document.getElementById("contents");
+                let url = data["images"]["0"]["url"]
+                contents.innerHTML = contents.innerHTML + `<a class="img-a" href="${url}"><img src="${url}" style='height:100%;width:100%;'></a>`
+            })
+            .catch(error => console.log(error));
+        },
+
+        fetchAPI(){
+            if(this.max_count===null || this.max_count===0 || this.isRunning){
+                return;
+            }
+            let count = 0;
+            this.isRunning = true;
+            this.fetchData();
+            const interval = setInterval(() => {
+                if (count >= this.max_count - 1) {
+                    clearInterval(interval);
+                    this.isRunning = false;
+                }
+                else{
+                    this.fetchData();
+                }
+                count++;
+            }, 6000);
+        }
+    }
+}
+
+</script>
