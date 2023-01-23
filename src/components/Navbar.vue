@@ -1,7 +1,7 @@
 <template>
 <nav>
     <div class="flex flex-wrap justify-between bg-black text-white p-2">
-      <a class="ml-2 text-lg pd-4">Navbar</a>
+      <a class="ml-2 text-lg pd-4">WaifuG</a>
       <div>
         <input class="rounded-sm p-1 text-black" type="number" placeholder="Search">
         <button
